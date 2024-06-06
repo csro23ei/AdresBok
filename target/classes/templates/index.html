@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book</title>
+</head>
+
+<body>
+    <h1>Add New Address</h1>
+    <div>
+        <form method="post" th:action="@{/new-address}">
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="phone" placeholder="Phone" required>
+            <input type="number" name="birthYear" placeholder="Birth Year" required>
+            <button>Save</button>
+        </form>
+    </div>
+    <ul>
+        <li th:each="address : ${addresses}">
+            <span th:text="${address.name + ' - ' + address.email + ' - ' + address.phone + ' - ' + address.birthYear}"></span>
+            <a th:href="@{/edit-address/{id}(id=${address.id})}">[Edit]</a>
+            <a th:href="@{/delete-address(id=${address.id})}">[X]</a>
+        </li>
+    </ul>
+
+    <h1>Search Addresses by Birth Year</h1>
+    <form method="get" th:action="@{/between-years-address-result}">
+        <label for="startYear">Start Year:</label>
+        <input type="number" name="startYear" required>
+        <label for="endYear">End Year:</label>
+        <input type="number" name="endYear" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <ul th:if="${addressesBetweenYears != null}">
+        <li th:each="address : ${addressesBetweenYears}">
+            <span th:text="${address.name + ' - ' + address.email + ' - ' + address.phone + ' - ' + address.birthYear}"></span>
+        </li>
+    </ul>
+</body>
+
+</html>

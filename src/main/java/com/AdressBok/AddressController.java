@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 @Controller
 public class AddressController {
-
-    @Autowired
-    private AddressRepository addressRepository;
 
     @GetMapping
     public String getIndex(Model model) {
@@ -20,15 +20,25 @@ public class AddressController {
         return "index";
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(AddressController.class);
+
+    @Autowired
+    private AddressRepository addressRepository;
+
     @PostMapping("/new-address")
     public String addNew(@RequestParam("name") String name, @RequestParam("email") String email,
             @RequestParam("phone") String phone, @RequestParam("birthYear") int birthYear) {
-        Address address = new Address();
-        address.setName(name);
-        address.setEmail(email);
-        address.setPhone(phone);
-        address.setBirthYear(birthYear);
-        addressRepository.save(address);
+        try {
+            Address address = new Address();
+            address.setName(name);
+            address.setEmail(email);
+            address.setPhone(phone);
+            address.setBirthYear(birthYear);
+            addressRepository.save(address);
+        } catch (Exception e) {
+            logger.error("Error saving address", e);
+            // Optionally, add some user-friendly error handling here
+        }
         return "redirect:/";
     }
 
