@@ -37,7 +37,7 @@ public class AddressController {
             addressRepository.save(address);
         } catch (Exception e) {
             logger.error("Error saving address", e);
-            // Optionally, add some user-friendly error handling here
+    
         }
         return "redirect:/";
     }
